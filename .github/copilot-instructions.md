@@ -8,10 +8,9 @@ spatially distributed feed, communicate through distinct fast and slow signal
 channels, and may later evolve through inheritance and variation. A 3D viewer is
 an important part of the project, not an afterthought.
 
-The initial cell types are fixed while the basic field, feed competition, and
-visualization are established. Evolution and task/reward systems are later work.
-Treat neuron and evolution language as inspiration for an abstract simulation,
-not as a requirement to reproduce biological details.
+Cell kinds share common state and implement the `CellType` trait for kind-
+specific rules. Keep the initial simulation abstract; biological fidelity is
+not a requirement. Evolution and task/reward systems are later work.
 
 The project must use:
 
@@ -25,9 +24,11 @@ The project must use:
 Do not introduce nightly-only Rust features unless the Architect explicitly
 approves the decision and documents the reason in docs/DECISIONS.md.
 
-Do not assume a game engine, renderer, UI framework, spatial data structure, or
-simulation algorithm has been selected. Propose significant choices to the
-Architect and record accepted decisions.
+Bevy is the selected engine for the initial desktop viewer. Keep Bevy-specific
+presentation, input, and scheduling in the viewer, and keep simulation rules
+in the portable library. Propose other significant engine, renderer, spatial
+data structure, or simulation changes to the Architect and record accepted
+decisions.
 
 ## General Engineering Principles
 
@@ -115,14 +116,18 @@ Significant changes include:
 
 ## Documentation
 
-Before making a significant architectural change:
-
-1. Review docs/ARCHITECTURE.md
-2. Review docs/SIMULATION_DESIGN.md
-3. Review docs/DECISIONS.md
-4. Review docs/ROADMAP.md
+Before making a significant architectural change, review the relevant source
+modules and `docs/DECISIONS.md`. Document accepted decisions there. Add broader
+architecture documents only when they answer a concrete project need.
 
 Do not silently contradict existing architectural decisions.
+
+Record every accepted architectural, simulation-rule, or user-facing behavior
+decision in `docs/DECISIONS.md` in the same change that implements it, including
+numerical defaults and control bindings. If a decision changes, add a new entry
+that explicitly supersedes the previous one; do not rely on chat history or
+silently edit the old decision. Keep `docs/PROJECT_STATE.md` and the README
+useful for resuming from a fresh clone.
 
 ## Testing
 
