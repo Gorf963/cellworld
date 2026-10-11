@@ -18,8 +18,9 @@ cargo run
 
 The application opens a window that displays cells as green spheres and feed
 as amber cubes. The simulation advances every half-second; press Space to
-pause or resume, and Esc to close the window. The default feed generation is
-`1.5` units per tick.
+pause or resume, and Esc to close the window. If the last cell dies, the
+viewer exits automatically. The default feed generation is `1.5` units per
+tick.
 
 Use the **− / +** controls in the top-left panel to decrease or increase
 generated feed by `0.1` units per tick. Feed generation cannot be reduced below

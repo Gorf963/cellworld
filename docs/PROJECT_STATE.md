@@ -56,7 +56,8 @@ cargo test --all-targets
 The viewer opens a window. Space pauses/resumes; Escape closes it. The top-left
 HUD's −/+ buttons adjust feed generated per tick by 0.1. Left-drag orbits,
 right-drag pans, and the scroll wheel zooms. Simulation steps occur every
-0.5 seconds and stop when no cells remain.
+0.5 seconds, stop when no cells remain, and the application exits
+automatically once the population is extinct.
 
 ## Continuing work
 

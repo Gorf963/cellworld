@@ -211,6 +211,35 @@ The visible state reports `Extinct`; users close the window to end the run.
 
 Accepted
 
+## Decision: Close the viewer automatically when the population becomes extinct
+
+### Context
+
+The previous extinction behavior left the viewer open after the final tick,
+which made a zero-cell result look like a stuck application instead of a clean
+end state.
+
+### Decision
+
+Supersedes the earlier extinction decision: when `cell_count()` reaches zero,
+`AppExit::Success` is sent and the Bevy application exits immediately after the
+final UI update. The status text still reports `Extinct` before shutdown.
+
+### Alternatives
+
+- Leave the application open until the user manually closes it.
+- Exit before redrawing the final extinction text.
+
+### Consequences
+
+- The final extinction frame is visible and then the window closes cleanly.
+- The process exits with a successful status code after the last cell dies.
+- A restart still requires launching the app again.
+
+### Status
+
+Accepted
+
 ## Decision: Expose feed generation and camera controls in the viewer
 
 ### Context

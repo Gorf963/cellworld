@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 use std::env;
 
+use bevy::app::AppExit;
 use bevy::input::mouse::{MouseMotion, MouseScrollUnit, MouseWheel};
 use bevy::prelude::*;
 use cellworld::{Coord3, World};
@@ -96,6 +97,7 @@ pub fn run() {
                 adjust_feed_rate,
                 control_camera,
                 sync_scene,
+                exit_on_extinction,
                 update_feed_rate_text,
             )
                 .chain(),
@@ -413,6 +415,23 @@ fn sync_scene(
     }
 }
 
+fn exit_on_extinction(
+    simulation: Res<Simulation>,
+    mut app_exit: MessageWriter<AppExit>,
+    mut has_exited: Local<bool>,
+) {
+    if *has_exited || !should_close_on_extinction(simulation.world.cell_count()) {
+        return;
+    }
+
+    *has_exited = true;
+    app_exit.write(AppExit::Success);
+}
+
+fn should_close_on_extinction(cell_count: usize) -> bool {
+    cell_count == 0
+}
+
 fn update_feed_rate_text(
     simulation: Res<Simulation>,
     mut feed_rate_texts: Query<&mut Text, With<FeedRateText>>,
@@ -434,4 +453,15 @@ fn world_position(position: Coord3) -> Vec3 {
         position.y as f32 * WORLD_SPACING,
         position.z as f32 * WORLD_SPACING,
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::should_close_on_extinction;
+
+    #[test]
+    fn extinct_population_requests_exit() {
+        assert!(should_close_on_extinction(0));
+        assert!(!should_close_on_extinction(1));
+    }
 }
